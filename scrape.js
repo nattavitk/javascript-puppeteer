@@ -10,19 +10,29 @@ let scrape = async () => {
   await page.waitFor(1000);
 
   // Scrape
-  await page.click(
-    '#default > div > div > div > div > section > div:nth-child(2) > ol > li:nth-child(1) > article > div.image_container > a > img'
-  );
+  //   await page.click(
+  //     '#default > div > div > div > div > section > div:nth-child(2) > ol > li:nth-child(1) > article > div.image_container > a > img'
+  //   );
 
   const result = await page.evaluate(() => {
     //return something
-    let title = document.querySelector('h1').innerText;
-    let price = document.querySelector('.price_color').innerText;
+    let data = [];
+    let elements = document.querySelectorAll('.product_pod');
 
-    return {
-      title,
-      price,
-    };
+    //  elements.map(item => {
+    //    let title = document.querySelector('h3 a').innerText;
+    //    let price = document.querySelector('.product_price .price_color')
+    //      .innerText;
+    //    data.push({ title, prices });
+    //  });
+
+    for (let element of elements) {
+      let title = element.childNodes[5].innerText; // Select the title
+      let price = element.childNodes[7].children[0].innerText; // Select the price
+      data.push({ title, price });
+    }
+
+    return data;
   });
 
   browser.close();
